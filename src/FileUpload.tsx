@@ -67,6 +67,8 @@ const FileUploadBox: React.FC = () => {
     setSelectedFiles([]);
   };
   
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
   return (
     <div className="file-upload-box">
       <div
@@ -78,29 +80,35 @@ const FileUploadBox: React.FC = () => {
         {selectedFiles.length === 0 ? (
           <p className='text'>Click to upload or drag and drop</p>
         ) : (
-          selectedFiles.map((file, index) => (
-            <div key={index} className="file-preview">
-              <button
-                className="remove-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleRemoveFile(index);
-                }}
-              >
-                x
-              </button>
-              <div className="preview-content">
-                {file.type.startsWith('image/') ? (
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`File ${index}`}
-                    className="file-preview-image"
-                  />
+            selectedFiles.map((file, index) => (
+                <div key={index} className="file-preview">
+                  <button
+                    className="remove-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveFile(index);
+                    }}
+                  >
+                    x
+                  </button>
+                  <div
+      className="preview-content"
+      onClick={(e) => {
+        e.stopPropagation(); // Prevent the click event from reaching the file input
+        setPreviewImage(URL.createObjectURL(file));
+      }}
+    >
+      {file.type.startsWith('image/') ? (
+        <img
+          src={URL.createObjectURL(file)}
+          alt={`File ${index}`}
+          className={`file-preview-image ${file.type === 'image/png' ? 'fixed-size' : ''}`}
+        />
                 ) : file.type === 'application/pdf' ? (
                   <div className="pdf-preview">
                     <div className="custom-pdf-preview">
                       <img
-                        src="https://i.postimg.cc/5tQ8xgJ9/PDF_file_icon.svg.png"
+                        src="https://i.postimg.cc/pLMbvDSf/unnamed.png"
                         alt={`PDF Icon ${index}`}
                         className="pdf-icon"
                       />
@@ -126,6 +134,17 @@ const FileUploadBox: React.FC = () => {
             </div>
           ))
         )}
+{previewImage && (
+  <div className="image-preview-overlay" onClick={() => setPreviewImage(null)}>
+    <button className="exit-button" onClick={(e) => { e.stopPropagation(); setPreviewImage(null); }}>
+      X
+    </button>
+    <img src={previewImage} alt="Preview" className="larger-preview-image" />
+  </div>
+)}
+
+
+
         <input
           ref={fileInputRef}
           type="file"
