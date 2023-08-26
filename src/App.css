@@ -1,38 +1,57 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.file-upload-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.text{
+  font-size: 20px;
+  margin: auto;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.rectangle-box {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  width: 700px; /* Adjust this to your desired width */
+  height: 100px; /* Adjust this to your desired height */
+  border: 2px dashed #ccc;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  cursor: pointer;
 }
+
+.file-preview {
+  position: relative;
+  width: 100px; /* Adjust this to your desired width */
+  height: 100px; /* Adjust this to your desired height */
+  border-radius: 8px;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.file-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.custom-pdf-preview{
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.remove-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #f00;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 0 8px 0 0;
+  cursor: pointer;
+}
+
