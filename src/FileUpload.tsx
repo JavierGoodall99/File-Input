@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 
-import axios from 'axios';
+import axios from "axios";
 
 const FileUploadBox: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Replace with your actual Dataverse API URL
-  const dataverseApiUrl = 'https://your-dataverse-instance/api/';
-  const accessToken = 'your-access-token'; // Replace with your actual access token
+  const dataverseApiUrl = "https://your-dataverse-instance/api/";
+  const accessToken = "your-access-token"; // Replace with your actual access token
 
   const handleFileChange = (newFiles: File[]) => {
     setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
@@ -41,7 +41,7 @@ const FileUploadBox: React.FC = () => {
   const handleUploadFiles = async () => {
     for (const file of selectedFiles) {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
 
       try {
         const response = await axios.post(
@@ -50,7 +50,7 @@ const FileUploadBox: React.FC = () => {
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
           }
         );
@@ -59,14 +59,14 @@ const FileUploadBox: React.FC = () => {
         const fileId = response.data.data.id;
         console.log(`File uploaded with ID: ${fileId}`);
       } catch (error) {
-        console.error('Error uploading file:', error);
+        console.error("Error uploading file:", error);
       }
     }
 
     // Clear selectedFiles after uploading
     setSelectedFiles([]);
   };
-  
+
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   return (
@@ -78,33 +78,35 @@ const FileUploadBox: React.FC = () => {
         onClick={handleBoxClick}
       >
         {selectedFiles.length === 0 ? (
-          <p className='text'>Click to upload or drag and drop</p>
+          <p className="text">Click to upload or drag and drop</p>
         ) : (
-            selectedFiles.map((file, index) => (
-                <div key={index} className="file-preview">
-                  <button
-                    className="remove-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemoveFile(index);
-                    }}
-                  >
-                    x
-                  </button>
-                  <div
-      className="preview-content"
-      onClick={(e) => {
-        e.stopPropagation(); // Prevent the click event from reaching the file input
-        setPreviewImage(URL.createObjectURL(file));
-      }}
-    >
-      {file.type.startsWith('image/') ? (
-        <img
-          src={URL.createObjectURL(file)}
-          alt={`File ${index}`}
-          className={`file-preview-image ${file.type === 'image/png' ? 'fixed-size' : ''}`}
-        />
-                ) : file.type === 'application/pdf' ? (
+          selectedFiles.map((file, index) => (
+            <div key={index} className="file-preview">
+              <button
+                className="remove-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemoveFile(index);
+                }}
+              >
+                x
+              </button>
+              <div
+                className="preview-content"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent the click event from reaching the file input
+                  setPreviewImage(URL.createObjectURL(file));
+                }}
+              >
+                {file.type.startsWith("image/") ? (
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`File ${index}`}
+                    className={`file-preview-image ${
+                      file.type === "image/png" ? "fixed-size" : ""
+                    }`}
+                  />
+                ) : file.type === "application/pdf" ? (
                   <div className="pdf-preview">
                     <div className="custom-pdf-preview">
                       <img
@@ -114,7 +116,8 @@ const FileUploadBox: React.FC = () => {
                       />
                     </div>
                   </div>
-                ) : file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? (
+                ) : file.type ===
+                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ? (
                   <div className="word-preview">
                     <div className="custom-word-preview">
                       <img
@@ -134,22 +137,37 @@ const FileUploadBox: React.FC = () => {
             </div>
           ))
         )}
-{previewImage && (
-  <div className="image-preview-overlay" onClick={() => setPreviewImage(null)}>
-    <button className="exit-button" onClick={(e) => { e.stopPropagation(); setPreviewImage(null); }}>
-      X
-    </button>
-    <img src={previewImage} alt="Preview" className="larger-preview-image" />
-  </div>
-)}
-
-
+        {previewImage && (
+          <div
+            className="image-preview-overlay"
+            onClick={(e) => {
+              e.stopPropagation(); 
+              setPreviewImage(null);
+            }}
+          >
+            <button
+              className="exit-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setPreviewImage(null);
+              }}
+            >
+              X
+            </button>
+            <img
+              src={previewImage}
+              alt="Preview"
+              className="larger-preview-image"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        )}
 
         <input
           ref={fileInputRef}
           type="file"
           multiple
-          style={{ display: 'none' }}
+          style={{ display: "none" }}
           onChange={(e) => handleFileChange(Array.from(e.target.files || []))}
           accept="image/*, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         />
